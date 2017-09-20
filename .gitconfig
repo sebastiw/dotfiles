@@ -1,0 +1,16 @@
+[user]
+        email = visnae@gmail.com
+        name = Sebastian Weddmark Olsson
+[push]
+        default = simple
+[core]
+        editor = ec
+[alias]
+        st = status
+        co = checkout
+        ll = log --graph --oneline --decorate
+        lll = log --graph --oneline --decorate --all
+        rl = !git --no-pager log --first-parent --no-merges --reverse --name-only master...
+        hist = log --graph --format=format:\"%C(red)%h%C(reset) %C(yellow)%ad%C(reset) | %s %C(green)\\[%an\\]%C(reset)%C(bold blue)%d%C(reset)\" --abbrev-commit --date=short
+        alias = !git config --global --list | grep ^alias
+        rewrite-commits = "!f() { VAR=$1; OLD=$2; NEW=$3; shift 3; git filter-branch --env-filter \"if [ \\\"$`echo $VAR`\\\" = '$OLD' ]; then export $VAR='$NEW'; fi\" $@; }; f "

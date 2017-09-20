@@ -1,0 +1,12 @@
+alias ls="ls --color=auto"
+alias l="ls -la"
+# alias ip="ip -c a"
+
+alias g="git st"
+alias gd="git diff"
+alias gh="git hist"
+alias gc="git checkout"
+
+alias grep="grep --color=auto"
+
+alias s3cmd="s3cmd --no-progress"
