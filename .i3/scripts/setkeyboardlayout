@@ -1,0 +1,3 @@
+setxkbmap -layout seba
+# -option ctrl:nocaps -option lv3:ralt_switch
+# -option lv5:rwin_switch_lock

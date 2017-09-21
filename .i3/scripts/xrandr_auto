@@ -1,0 +1,7 @@
+#!/bin/sh
+
+~/bin/detect_displays &
+
+~/.i3/scripts/caps_lock_off &
+
+~/.i3/scripts/setkeyboardlayout &

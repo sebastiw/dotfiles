@@ -1,0 +1,61 @@
+#!/bin/sh
+
+lock() {
+    i3lock --color 000000
+}
+
+case "$1" in
+    lock)
+        lock
+        ;;
+    logout)
+        i3-msg exit
+        ;;
+    suspend)
+        # lock && dbus-send --system --print-reply \
+        #                   --dest="org.freedesktop.UPower" \
+        #                   /org/freedesktop/UPower \
+        #                   org.freedesktop.UPower.Suspend
+        lock && dbus-send --system --print-reply \
+                          --dest=org.freedesktop.login1 \
+                          /org/freedesktop/login1 \
+                          "org.freedesktop.login1.Manager.Suspend" \
+                          boolean:true
+        #        lock && systemctl suspend
+        ;;
+    hibernate)
+        # lock && dbus-send --system --print-reply \
+        #                   --dest="org.freedesktop.UPower" \
+        #                   /org/freedesktop/UPower \
+        #                   org.freedesktop.UPower.Hibernate
+        lock && dbus-send --system --print-reply \
+                          --dest=org.freedesktop.login1 \
+                          /org/freedesktop/login1 \
+                          "org.freedesktop.login1.Manager.Hibernate" \
+                          boolean:true
+#        lock && systemctl hibernate
+        ;;
+    reboot)
+        # reboot
+
+        dbus-send --system --print-reply \
+                  --dest=org.freedesktop.login1 /org/freedesktop/login1 \
+                  "org.freedesktop.login1.Manager.Reboot" \
+                  boolean:true
+        
+        ;;
+    shutdown)
+        # poweroff
+
+        dbus-send --system --print-reply \
+                  --dest=org.freedesktop.login1 /org/freedesktop/login1 \
+                  "org.freedesktop.login1.Manager.PowerOff" \
+                  boolean:true
+        
+        ;;
+    *)
+        echo "Usage: $0 {lock|logout|suspend|hibernate|reboot|shutdown}"
+        exit 2
+esac
+
+exit 0
