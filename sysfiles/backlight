@@ -1,12 +1,22 @@
 #!/bin/sh
 bl_dev=/sys/class/backlight/intel_backlight
-step=100
+max=`cat ${bl_dev}/max_brightness`
+current=`cat ${bl_dev}/brightness`
+min=1
 
-case $1 in
-    -)
-        echo $(($(< $bl_dev/brightness) - $step)) >$bl_dev/brightness
-        ;;
-    +)
-        echo $(($(< $bl_dev/brightness) + $step)) >$bl_dev/brightness
-        ;;
-esac
+step=$(($max/5))
+
+op=${1}
+[ "${op}" != "-" ] && [ "${op}" != "+" ] && op="+"
+
+new=$(($current $op $step))
+
+if [ $new -lt $min ]
+then
+    echo $min > $bl_dev/brightness
+elif [ $new -gt $max ]
+then
+    echo $max > $bl_dev/brightness
+else
+    echo $new > $bl_dev/brightness
+fi
