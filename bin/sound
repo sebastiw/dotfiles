@@ -1,0 +1,56 @@
+#!/bin/sh
+
+max=100
+min=1
+step=5
+
+IFS=$'\n'
+
+declare -A sinks
+while read -r dev
+do
+    status=`echo $dev | awk '{print $7}'`
+    sink=`echo $dev | awk '{print $2}'`
+    [ $DEBUG ] && echo "Found '${sink}' '${status}'"
+    sinks[$status]="$sink${sinks[$status]:+ }${sinks[$status]}"
+done <<< $(pactl list sinks short)
+
+IFS=" "
+
+running=${sinks[RUNNING]}
+
+[ $DEBUG ] && echo "Number of running devices found: ${#running[@]}"
+## If no running, take last sink
+[ ${#running[@]} -le 1 ] && running=$sink
+
+for sink in ${running[@]}
+do
+    op=${1:-usage}
+    case $op in
+        0)
+            [ $DEBUG ] && echo "Muting $sink"
+            pactl set-sink-mute $sink toggle
+            ;;
+        [+-])
+            current=$(pactl list sinks |\
+                          sed -ne "/Name: ${sink}/,/^\s*Volume:/p" |\
+                          awk -e '/Volume/{ sub(/%/, "",$5); print $5 }')
+            new=$(($current $op $step))
+            pactl set-sink-mute $sink false
+
+            [ $DEBUG ] && echo "New volume $new for $sink"
+            if [ $new -lt $min ]
+            then
+                pactl set-sink-volume "$sink" "$min%"
+            else
+                pactl set-sink-volume "$sink" "$new%"
+            fi
+            ;;
+        [0-9]|[0-9][0-9]|100)
+            [ $DEBUG ] && echo "New volume $op% for $sink"
+            pactl set-sink-volume "$sink" "$op%"
+            ;;
+        *)
+            echo "Usage: $0 [0|+|-]"
+    esac
+done

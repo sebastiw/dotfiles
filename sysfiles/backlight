@@ -1,4 +1,5 @@
 #!/bin/sh
+
 bl_dev=/sys/class/backlight/intel_backlight
 max=`cat ${bl_dev}/max_brightness`
 current=`cat ${bl_dev}/brightness`
