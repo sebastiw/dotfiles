@@ -1,0 +1,137 @@
+{
+    "layer": "bottom",
+    "position": "top",
+    "height": 32,
+
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["custom/spotify", "custom/weather",
+                      "backlight", "pulseaudio", "network", "idle_inhibitor",
+                      "battery", "clock"],
+    "sway/mode": {
+        "format": " {}"
+    },
+    "sway/workspaces": {
+        "format": "{name}",
+        "disable-scroll": true
+    },
+    "sway/window": {
+        "max-length": 80,
+        "tooltip": false
+    },
+    "clock": {
+        "format": "{:%a %d %b %H:%M}",
+        "tooltip": false
+    },
+    "battery": {
+        "format": "{capacity}% {icon}",
+        "format-alt": "{time} {icon}",
+        "interval": 30,
+        "states": {
+            "100": 100,
+            "90": 90,
+            "80": 80,
+            "70": 70,
+            "60": 60,
+            "50": 50,
+            "40": 40,
+            "30": 30,
+            "20": 20,
+            "10": 10,
+            "critical": 5
+        },
+        "format-discharging-100": "{capacity}% ",
+        "format-discharging-90": "{capacity}% ",
+        "format-discharging-80": "{capacity}% ",
+        "format-discharging-70": "{capacity}% ",
+        "format-discharging-60": "{capacity}% ",
+        "format-discharging-50": "{capacity}% ",
+        "format-discharging-40": "{capacity}% ",
+        "format-discharging-30": "{capacity}% ",
+        "format-discharging-20": "{capacity}% ",
+        "format-discharging-10": "{capacity}% ",
+        "format-discharging-critical": "{capacity}% ",
+        "format-charging-100": "{capacity}% ",
+        "format-charging-90": "{capacity}% ",
+        "format-charging-80": "{capacity}% ",
+        "format-charging-70": "{capacity}% ",
+        "format-charging-60": "{capacity}% ",
+        "format-charging-50": "{capacity}% ",
+        "format-charging-40": "{capacity}% ",
+        "format-charging-30": "{capacity}% ",
+        "format-charging-20": "{capacity}% ",
+        "format-charging-10": "{capacity}% ",
+        "format-charging-critical": "{capacity}% ",
+        "tooltip": true
+    },
+    "network": {
+        "format-wifi": "{icon}",
+        "format-icons": ["冷", "爛", "嵐", "襤", "蠟"],
+        "format-ethernet": "",
+        "format-disconnected": "來",
+        "on-click": "termite --name=launcher -e 'sudo wifi-menu'",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip": true
+    },
+    "pulseaudio": {
+        "format-alt": "{volume} {icon}",
+        "format-alt-click": "click-right",
+        "format": "{volume:2}% {icon}",
+        "format-bluetooth": "{volume:2}% {icon}",
+        "format-muted": "",
+        "format-source": "{volume:2}%",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphones": "",
+            "headset": "",
+            "default": ["", "", ""]
+        },
+        "scroll-step": 10,
+        "on-click": "pavucontrol",
+        "tooltip": true
+    },
+    "custom/spotify": {
+        "interval": 1,
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/spotify.sh",
+        "exec-if": "pgrep spotify",
+        "escape": true
+    },
+    "backlight": {
+        "format": "{icon}",
+        "format-alt": "{percent}% {icon}",
+        "format-alt-click": "click-right",
+        "format-icons": ["", "", "︲", "︳", "", "", "", "", "茶", "刺"],
+        "on-scroll-down": "light -U 1",
+        "on-scroll-up": "light -A 1"
+    },
+    "custom/weather": {
+        "format": "{}",
+        "format-alt": "{alt}: {}",
+        "format-alt-click": "click-right",
+        "interval": 1800,
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/weather.sh",
+        "exec-if": "ping wttr.in -c1"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "￧",
+            "deactivated": ""
+        },
+        "tooltip": false
+    },
+    "custom/mail": {
+        "format": "",
+        "format-alt": "{alt} ",
+        "format-alt-click": "click-right",
+        "interval": 60,
+        "return-type": "json",
+        "exec": "~/.config/waybar/modules/mail.py",
+        "tooltip": false
+    },
+    "tray": {
+        "icon-size": 18
+    }
+}
