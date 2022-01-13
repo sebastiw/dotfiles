@@ -94,15 +94,15 @@ exec --no-startup-id redshift -c ~/.config/redshift/config
 # Bug in spotify makes it impossible to assign it
 for_window [class="Spotify"] move window to workspace 10
 
-workspace 1 output DP-1 eDP-1
-workspace 2 output eDP-1
-workspace 3 output DP-1 eDP-1
-workspace 4 output eDP-1
-workspace 5 output eDP-1
-workspace 7 output DP-1 eDP-1
+workspace 1 output DP-5 DP-2 DP-1 eDP-1
+workspace 2 output DP-4 eDP-1
+workspace 3 output DP-5 DP-2 DP-1 eDP-1
+workspace 4 output DP-4 eDP-1
+workspace 5 output DP-4 eDP-1
+workspace 7 output DP-5 DP-2 DP-1 eDP-1
 workspace 10 output eDP-1
 
-[app_id="kitty"] focus
+for_window [app_id="kitty"] focus
 
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
@@ -252,15 +252,19 @@ input * xkb_layout "seba"
 # Controls:
 #
 
-	bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ $(printf "%s\n" 100 $(($(pacmd dump-volumes | grep -m1 Sink | grep -Po '\d+(?=%)' | head -n1 + 3)) | sort -g | head -n1)%
-	bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -3%
-	bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-	bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+    bindsym XF86AudioPause exec playerctl play-pause
+    bindsym XF86AudioPlay exec playerctl play-pause
+    bindsym XF86AudioNext exec playerctl next
+    bindsym XF86AudioPrev exec playerctl previous
+    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ $(printf "%s\n" 100 $(($(pacmd dump-volumes | grep -m1 Sink | grep -Po '\d+(?=%)' | head -n1 + 3)) | sort -g | head -n1)%
+    bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -3%
+    bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+    bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
-	bindsym XF86MonBrightnessDown exec light -U 1
-	bindsym XF86MonBrightnessUp exec light -A 1
+    bindsym XF86MonBrightnessDown exec light -U 1
+    bindsym XF86MonBrightnessUp exec light -A 1
 
-	bindsym --release Print exec grim -g \"$(slurp)\" - | wl-copy
+    bindsym --release Print exec grim -g \"$(slurp)\" - | wl-copy
 
 #
 # Resizing containers:
