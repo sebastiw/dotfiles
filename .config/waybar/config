@@ -6,7 +6,7 @@
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": ["sway/window"],
     "modules-right": ["custom/spotify", "custom/weather",
-                      "backlight", "pulseaudio", "network", "idle_inhibitor",
+                      "backlight", "pulseaudio", "network", "custom/vpn", "idle_inhibitor",
                       "battery", "clock"],
     "sway/mode": {
         "format": " {}"
@@ -72,6 +72,12 @@
         "on-click": "termite --name=launcher -e 'sudo wifi-menu'",
         "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "tooltip": true
+    },
+    "custom/vpn": {
+        "interval": 10,
+        "return-type": "json",
+        "on-click": "/opt/ivpn/ui/bin/ivpn-ui",
+        "exec": "~/.config/waybar/modules/vpn.sh",
     },
     "pulseaudio": {
         "format-alt": "{volume} {icon}",
