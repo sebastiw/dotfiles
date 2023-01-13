@@ -126,6 +126,7 @@
             "activated": "￧",
             "deactivated": ""
         },
+        "timeout": 120,
         "tooltip": false
     },
     "custom/mail": {
