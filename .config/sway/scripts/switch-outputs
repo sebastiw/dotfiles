@@ -1,0 +1,21 @@
+#!/bin/bash
+
+OUTPUTS=($(swaymsg -t get_outputs | jq '.[].name'))
+
+if [[ ${#OUTPUTS} > 1 ]]
+then
+
+    for O in $OUTPUTS
+    do
+        echo "Enabling $O"
+        echo swaymsg output $O enable
+        echo swaymsg output $O power on
+        echo swaymsg output $O mode 1920x1080@60Hz
+    done
+
+    echo swaymsg output "eDP-1" disable
+    echo swaymsg output "eDP-1" power off
+else
+    echo swaymsg output ${OUTPUTS[0]} enable
+    echo swaymsg output ${OUTPUTS[0]} power on
+fi
