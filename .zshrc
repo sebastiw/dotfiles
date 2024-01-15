@@ -284,6 +284,9 @@ function erlang() {
 ###
 
 # Completion
-source /usr/bin/aws_zsh_completer.sh
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit && compinit
+[[ -f /usr/local/bin/aws_completer ]] && complete -C '/usr/local/bin/aws_completer' aws
+[[ -f /usr/bin/aws_zsh_completer.sh ]] && source /usr/bin/aws_zsh_completer.sh
 source <(kubectl completion zsh)
 
