@@ -1,0 +1,313 @@
+#!/bin/sh
+#
+# View "anything".
+#
+# Urban Boquist <urban@boquist.net>.
+
+# Life is hard - Solaris /bin/sh sucks, but there is no /bin/ksh on Linux...
+# Make sure that we have a decent shell before we proceed:
+if [ "`uname`" = SunOS -a -z "$_been_here" ]; then
+    _been_here=yes; export _been_here; exec /bin/ksh $0 "$@"
+fi
+unset _been_here
+
+usage () {
+    echo "Usage: `basename $0` [-px] file ..."
+}
+
+while getopts px i; do
+    case $i in
+	p) doPrint=yes ;;
+	x) doExtract=yes ;;
+	*) usage
+	   exit 1 ;;
+    esac
+done
+
+shift `expr "$OPTIND" - 1`
+
+# Keep arguments in "$@" to handle spaces in file names!
+
+# Remove temporary files on exit:
+tmp=/tmp/v.$$
+cleanup () {
+    rm -f "$tmp"
+}
+trap cleanup 1 15
+
+# Utility function: check if a program is available:
+check () {
+    if type "$1" > /dev/null 2>&1; then
+	return 0
+    else
+	return 1
+    fi
+}
+
+pdfviewer () {
+    if check okular; then
+	okular "$@"
+    elif check ggv; then
+	ggv "$@"
+    elif check gv; then
+	gv "$@"
+    else
+        emacs "$@"
+    fi
+}
+
+psviewer () {
+    if check ggv; then
+	ggv "$@"
+    elif check gv; then
+	gv "$@"
+    else
+	gs "$@"
+    fi
+}
+
+imageviewer () {
+    if check xv; then
+	xv "$@"
+    elif check feh; then
+	feh "$@"
+    elif check geeqie; then
+	geeqie "$@"
+    elif check eog; then
+	eog "$@"
+    elif check display; then
+	display "$@"
+    else
+	xloadimage "$@"
+    fi
+}
+
+realplayer () {
+    if check mplayer; then
+	mplayer "$@"
+    elif check realplayergold; then
+	realplayergold "$@"
+    else
+	command realplayer "$@"
+    fi
+}
+
+audioplayer () {
+    if check xmms; then
+	xmms "$@"
+    elif check gqmpeg; then
+	gqmpeg "$@"
+    else
+	mpg123 -b 2048 "$@"
+    fi
+}
+
+movieplayer () {
+    if check mplayer; then
+	mplayer -ao null "$@"
+    elif check vlc; then
+	vlc "$@"
+    else
+	xanim "$@"
+    fi
+}
+
+office () {
+    if check ooffice; then
+	ooffice "$@"
+    elif check soffice; then
+	soffice "$@"
+    else
+	antiword "$@" | pager
+    fi
+}
+
+pager () {
+    if [ -n "$PAGER" -a "$PAGER" != "less" ]; then
+	"$PAGER" "$@"
+    elif check less; then
+	less -f -i -X "$@"
+    else
+	more "$@"
+    fi
+}
+
+tarprog () {
+    if check gtar; then
+	xtar="gtar"
+    else
+	xtar="tar"
+    fi
+    case "$1" in
+	list)
+	    shift
+	    $xtar -tvf "$@" ;;
+	extract)
+	    shift
+	    # Work-around problem with GTAR on top of Windows file system:
+	    case "`uname`" in
+		SunOS)
+		    /bin/tar -xvf "$@"
+		    ;;
+		[Ll]inux*)
+		    if [ -x /bin/pax ]; then
+			pax=/bin/pax
+		    else
+			pax=/usr/bin/pax
+		    fi
+		    if [ "$@" = "-" ]; then
+			$pax -r
+		    else
+			$pax -rf "$@"
+		    fi
+		    ;;
+		*)
+		    $xtar -xvf "$@"
+		    ;;
+	    esac
+    esac
+}
+
+uncompressor () {
+    suf="$1"
+    shift
+    case "$suf" in
+	gpg|asc) gpg -d "$@" ;;
+	     bz) bunzip -c "$@" ;;
+            bz2) bunzip2 -c "$@" ;;
+	      *) gunzip -c "$@" ;;
+    esac
+}
+
+extractor () {
+    suf="$1"
+    shift
+    case "$suf" in
+	        zip) unzip "$@" ;;
+	        tar) tarprog extract "$@" ;;
+	jar|ear|war) jar -xvf "$@" ;;
+    esac
+}
+
+lister () {
+    suf="$1"
+    shift
+    case "$suf" in
+	        zip) unzip -l "$@" ;;
+	        tar) tarprog list "$@" ;;
+	jar|ear|war) jar -tvf "$@" ;;
+    esac
+}
+
+output_filter () {
+    # Hack to work-around SunOS tar problem:
+    egrep -v 'Cannot change mode|Unknown file type|^/tmp/PaxHeaders|tape blocks'
+}
+
+for file in "$@"; do
+    vfile="$file"
+    lfile="`echo $file | tr '[A-Z]' '[a-z]'`"
+    suf1="${lfile##*.}"
+    base="${lfile%.*}"
+    suf2="${base##*.}"
+
+    # uncompress into a temporary file, except for archives:
+    case "$suf1" in
+	    gpg|asc) uncompressor "$suf1" "$file" > "$tmp"
+		     chmod 600 "$tmp"
+		     vfile="$tmp"
+		     lfile="$base" ;;
+		tgz) needs_uncompress="tgz"
+		     lfile="$base".tar ;;
+	z|gz|bz|bz2) case "$suf2" in
+			 tar|jar|ear|war)
+	                     needs_uncompress="$suf1" ;;
+	                 *)  uncompressor "$suf1" "$file" > "$tmp"
+			     vfile="$tmp" ;;
+		     esac
+		     lfile="$base" ;;
+    esac
+
+    suf="${lfile##*.}"
+    if [ -n "$doPrint" ]; then
+	case "$suf" in
+	                 dvi) dvips "$vfile" ;;
+	                  ps) lpr "$vfile" ;;
+	                  pdf) cat "$vfile" | acroread -toPostScript | lpr ;;
+	                  hp) cat "$vfile" | hp2ps | lpr ;;
+	    [0-9]|[0-9]c|man) psroff -mandoc "$vfile" ;;
+	                   *) echo "Don't know how to print $file"
+	esac
+    elif [ -n "$doExtract" ]; then
+	if [ -n "$needs_uncompress" ]; then
+	    uncompressor "$needs_uncompress" "$vfile" |\
+		extractor "$suf" - 2>&1 | output_filter
+	else
+	    extractor "$suf" "$vfile" 2>&1 | output_filter
+	fi
+    else
+	case "$suf" in
+	        pdf) pdfviewer "$vfile" ;;
+	         fm) fmclient -f "$vfile" ;;
+	         ps) psviewer "$vfile" ;;
+	        eps) psviewer "$vfile" ;;
+	        dvi) xdvi "$vfile" ;;
+	        fig) xfig "$vfile" ;;
+	        obj) tgif "$vfile" ;;
+	        xwd) imageviewer "$vfile" ;;
+	        gif) imageviewer "$vfile" ;;
+	        jpg) imageviewer "$vfile" ;;
+	        ppm) imageviewer "$vfile" ;;
+	        tif) imageviewer "$vfile" ;;
+	       tiff) imageviewer "$vfile" ;;
+	        bmp) imageviewer "$vfile" ;;
+	        xpm) imageviewer "$vfile" ;;
+	        png) imageviewer "$vfile" ;;
+	         hp) hp2psview "$vfile" ;;
+	         rm) realplayer "$vfile" ;;
+	        rmm) realplayer "$vfile" ;;
+	        ram) realplayer "$vfile" ;;
+	        mp3) audioplayer "$vfile" ;;
+	        MP3) audioplayer "$vfile" ;;
+	        ogg) audioplayer "$vfile" ;;
+	        OGG) audioplayer "$vfile" ;;
+                wav) audioplay "$vfile" ;;
+                 au) audioplay "$vfile" ;;
+	        avi) movieplayer "$vfile" ;;
+	        asf) movieplayer "$vfile" ;;
+	        wmv) movieplayer "$vfile" ;;
+	        iso) movieplayer "$vfile" ;;
+	        img) movieplayer "$vfile" ;;
+	        vob) movieplayer "$vfile" ;;
+	        mov) movieplayer "$vfile" ;;
+	        flv) movieplayer "$vfile" ;;
+	        mpg) movieplayer "$vfile" ;;
+	        mp4) movieplayer "$vfile" ;;
+	        m4v) movieplayer "$vfile" ;;
+	        mkv) movieplayer "$vfile" ;;
+	       mpeg) movieplayer "$vfile" ;;
+	        doc) office "$vfile" ;;
+	        ppt) office "$vfile" ;;
+	        xls) office "$vfile" ;;
+	        aes) decrypt -f "$vfile" | pager ;;
+	       html) lynx "$vfile" ;;
+	        htm) lynx "$vfile" ;;
+	      shtml) lynx "$vfile" ;;
+	        man) nroff -mandoc "$vfile" | pager ;;
+	      [0-9]) nroff -mandoc "$vfile" | pager ;;
+	     [0-9]c) nroff -mandoc "$vfile" | pager ;;
+
+             tar|jar|ear|war|zip)
+		     if [ -n "$needs_uncompress" ]; then
+			 uncompressor "$needs_uncompress" "$vfile" | \
+			     lister "$suf" - | pager
+		     else
+	                 lister "$suf" "$vfile" | pager
+		     fi ;;
+
+	          *) pager "$vfile" ;;
+	esac
+    fi
+done
+
+rm -f "$tmp"
