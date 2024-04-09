@@ -6,11 +6,6 @@
 
 ### Variables
 #
-# Logo key. Use Mod1 for Alt.
-set $win Mod4
-set $ctrl Control
-set $alt Mod1
-
 set $player spotify
 
 set $cl_high #656529
@@ -24,7 +19,6 @@ client.focused          $cl_high $cl_high $cl_fore $cl_indi $cl_high
 client.focused_inactive $cl_back $cl_back $cl_fore $cl_back $cl_back
 client.unfocused        $cl_back $cl_back $cl_fore $cl_back $cl_back
 client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
-
 
 # Your preferred terminal emulator
 set $term kitty
@@ -70,7 +64,6 @@ exec swayidle -w \
                resume 'swaymsg "output * dpms on"' \
          timeout 600 'swaylock -f -c 000000' \
          before-sleep 'swaylock -f -c 000000'
-
 # This will turn of your displays after 300 seconds of inactivity and
 # then lock your screen afteranother 300 seconds, and turn your
 # screens back on when resumed. It will also lock your screen before
@@ -93,152 +86,7 @@ input * xkb_layout "seba"
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 
-### Key bindings
-#
-# Basics:
-#
-    # Start a terminal
-    bindsym $win+Return exec $term
-
-    # Kill focused window
-    bindsym $win+Shift+q kill
-
-    # Start your launcher
-    bindsym $win+d exec $menu
-
-    bindsym $ctrl+$alt+l exec swaylock -c 000000
-
-    # Drag floating windows by holding down $win and left mouse button.
-    # Resize them with right mouse button + $win.
-    # Despite the name, also works for non-floating windows.
-    # Change normal to inverse to use left mouse button for resizing and right
-    # mouse button for dragging.
-    floating_modifier $win normal
-
-    # Reload the configuration file
-    bindsym $win+Shift+c reload
-
-    # Exit sway (logs you out of your Wayland session)
-    bindsym $win+Shift+e exec $fzf_launcher $HOME/.config/sway/scripts/sway-exit
-#
-# Moving around:
-#
-    # Move your focus around
-    bindsym $win+Left focus left
-    bindsym $win+Down focus down
-    bindsym $win+Up focus up
-    bindsym $win+Right focus right
-
-    # Move the focused window with the same, but add Shift
-    bindsym $win+Shift+Left move left
-    bindsym $win+Shift+Down move down
-    bindsym $win+Shift+Up move up
-    bindsym $win+Shift+Right move right
-#
-# Workspaces:
-#
-    # Switch to workspace
-    bindsym $win+1 workspace 1
-    bindsym $win+2 workspace 2
-    bindsym $win+3 workspace 3
-    bindsym $win+4 workspace 4
-    bindsym $win+5 workspace 5
-    bindsym $win+6 workspace 6
-    bindsym $win+7 workspace 7
-    bindsym $win+8 workspace 8
-    bindsym $win+9 workspace 9
-    bindsym $win+0 workspace 10
-    # Move focused container to workspace
-    bindsym $win+Shift+1 move container to workspace 1
-    bindsym $win+Shift+2 move container to workspace 2
-    bindsym $win+Shift+3 move container to workspace 3
-    bindsym $win+Shift+4 move container to workspace 4
-    bindsym $win+Shift+5 move container to workspace 5
-    bindsym $win+Shift+6 move container to workspace 6
-    bindsym $win+Shift+7 move container to workspace 7
-    bindsym $win+Shift+8 move container to workspace 8
-    bindsym $win+Shift+9 move container to workspace 9
-    bindsym $win+Shift+0 move container to workspace 10
-    # Note: workspaces can have any name you want, not just numbers.
-    # We just use 1-10 as the default.
-#
-# Layout stuff:
-#
-    # You can "split" the current object of your focus with
-    # $win+b or $win+v, for horizontal and vertical splits
-    # respectively.
-    bindsym $win+b splith
-    bindsym $win+v splitv
-
-    # Switch the current container between different layout styles
-    bindsym $win+s layout stacking
-    bindsym $win+w layout tabbed
-    bindsym $win+e layout toggle split
-
-    # Make the current focus fullscreen
-    bindsym $win+f fullscreen
-
-    # Toggle the current focus between tiling and floating mode
-    bindsym $win+Shift+space floating toggle
-
-    # Swap focus between the tiling area and the floating area
-    bindsym $win+space focus mode_toggle
-
-    # Move focus to the parent container
-    bindsym $win+a focus parent
-#
-# Scratchpad:
-#
-    # Sway has a "scratchpad", which is a bag of holding for windows.
-    # You can send windows there and get them back later.
-
-    # Move the currently focused window to the scratchpad
-    bindsym $win+Shift+minus move scratchpad
-
-    # Show the next scratchpad window or hide the focused scratchpad window.
-    # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $win+minus scratchpad show
-
-#
-# Controls:
-#
-
-    bindsym XF86AudioPause exec playerctl play-pause -p $player
-    bindsym XF86AudioPlay exec playerctl play-pause -p $player
-    bindsym XF86AudioNext exec playerctl next -p $player
-    bindsym XF86AudioPrev exec playerctl previous -p $player
-    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ $(printf "%s\n" 100 $(($(pacmd dump-volumes | grep -m1 Sink | grep -Po '\d+(?=%)' | head -n1 + 3)) | sort -g | head -n1)%
-    bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -3%
-    bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-    bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-
-    bindsym XF86MonBrightnessDown exec light -U 1
-    bindsym XF86MonBrightnessUp exec light -A 1
-
-    bindsym --release Print exec grim -g \"$(slurp)\" - | wl-copy
-
-    bindsym $win+g exec switch-outputs
-
-#
-# Resizing containers:
-#
-mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
-
-    # Return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $win+r mode "resize"
-
-bindsym Print exec sway-interactive-screenshot
+include keybindings.config
 
 #
 # Status Bar:
