@@ -4,14 +4,16 @@
 
 # PATH=$N_PREFIX/bin:$PATH
 PATH=${KREW_ROOT:-$HOME/.krew}/bin:$PATH
-PATH=$(go env GOPATH)/bin:$PATH
+# PATH=$(go env GOPATH)/bin:$PATH
 PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH
-PATH=$HOME/work/forks/pest:$PATH
-PATH=/opt/flutter/bin:$PATH
+# PATH=$HOME/work/forks/pest:$PATH
+# PATH=/opt/flutter/bin:$PATH
+# PATH=$HOME/perl5/bin:$PATH
+PATH=$HOME/work/loltel/script:$PATH
 export PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/sources/oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # ENV VARIABLES
 export GPG_TTY=$(tty)
@@ -20,6 +22,10 @@ export WLR_DRM_NO_MODIFIERS=1
 export AWS_VAULT_BACKEND="file"
 export FLUX_FORWARD_NAMESPACE="terminators"
 export CHROME_EXECUTABLE="chromium"
+
+export MOZ_ENABLE_WAYLAND=1
+export QT_QPA_PLATFORM=wayland
+export XDG_SESSION_TYPE=wayland
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -177,14 +183,11 @@ zstyle ':completion:*:*:-command-:*:*' group-order alias builtins functions comm
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
 
-# Completion for sshoot
-eval "$(register-python-argcomplete sshoot)"
-
 # Completion for bazel
 fpath[1,0]=~/.zsh/completions/
 
 # Enable erlang/kerl by default
-. $HOME/.cache/erlang/OTP-26.0.1/activate
+. /usr/local/lib/erlang/26.2.1/activate
 
 function find_ip() {
     aws ec2 describe-network-interfaces --filters "Name=addresses.private-ip-address,Values=$1"
@@ -217,7 +220,6 @@ aws-vault() {
     awsclear
 }
 
-PATH="$HOME/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="$HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
