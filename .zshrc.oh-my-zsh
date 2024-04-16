@@ -1,10 +1,11 @@
 # If you come from bash you might have to change your $PATH.
 # export N_PREFIX=$HOME/.cache/nodejs
 # export npm_config_prefix="$HOME/.local"
+export GOPATH=$HOME/.cache/go
 
 # PATH=$N_PREFIX/bin:$PATH
 PATH=${KREW_ROOT:-$HOME/.krew}/bin:$PATH
-# PATH=$(go env GOPATH)/bin:$PATH
+PATH=$GOPATH/bin:$PATH
 PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH
 # PATH=$HOME/work/forks/pest:$PATH
 # PATH=/opt/flutter/bin:$PATH
@@ -26,6 +27,7 @@ export CHROME_EXECUTABLE="chromium"
 export MOZ_ENABLE_WAYLAND=1
 export QT_QPA_PLATFORM=wayland
 export XDG_SESSION_TYPE=wayland
+export MOZ_DISABLE_WAYLAND_PROXY=1 # https://bugzilla.mozilla.org/show_bug.cgi?id=1882449#c3
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -187,7 +189,8 @@ kitty + complete setup zsh | source /dev/stdin
 fpath[1,0]=~/.zsh/completions/
 
 # Enable erlang/kerl by default
-. /usr/local/lib/erlang/26.2.1/activate
+LATEST_ERLANG=`ls -tA /usr/local/lib/erlang/ | head -1`
+. /usr/local/lib/erlang/${LATEST_ERLANG}/activate
 
 function find_ip() {
     aws ec2 describe-network-interfaces --filters "Name=addresses.private-ip-address,Values=$1"
