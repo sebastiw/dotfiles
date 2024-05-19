@@ -27,7 +27,7 @@ export CHROME_EXECUTABLE="chromium"
 export MOZ_ENABLE_WAYLAND=1
 export QT_QPA_PLATFORM=wayland
 export XDG_SESSION_TYPE=wayland
-export MOZ_DISABLE_WAYLAND_PROXY=1 # https://bugzilla.mozilla.org/show_bug.cgi?id=1882449#c3
+# export MOZ_DISABLE_WAYLAND_PROXY=1 # https://bugzilla.mozilla.org/show_bug.cgi?id=1882449#c3
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.

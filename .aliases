@@ -11,4 +11,6 @@ alias grep="grep --color=auto"
 
 alias s3cmd="s3cmd --no-progress"
 
+alias sysinfo="sudo dmidecode -s system-serial-number; sudo dmidecode -s system-manufacturer; sudo dmidecode -s system-family"
+
 alias webex="systemd-run --unit=webex --user --collect --service-type=forking --property=MemoryMax=2G --property=Restart=on-abnormal -E LD_LIBRARY_PATH=/opt/Webex/lib /opt/Webex/bin/CiscoCollabHost"
