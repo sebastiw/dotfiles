@@ -13,7 +13,7 @@
     "percent": 0.583333333333333,
     "swallows": [
        {
-           "class": "^Thunderbird$"
+           "class": "^thunderbird$"
        // "instance": "^thunderbird$"
        // "title": "^$",
        // "transient_for": "^$",
@@ -22,32 +22,6 @@
     ],
     "type": "con"
 }
-
-/*
-{
-    "border": "normal",
-    "current_border_width": 2,
-    "floating": "user_off",
-    "geometry": {
-       "height": 1041,
-       "width": 447,
-       "x": 1469,
-       "y": 18
-    },
-    "name": "Buddy List",
-    "percent": 0.133333333333333,
-    "swallows": [
-       {
-           "class": "^Pidgin$",
-           "instance": "^Pidgin$",
-           "title": "^Buddy\\ List$",
-           // "transient_for": "^$",
-           "window_role": "^buddy_list$"
-       }
-    ],
-    "type": "con"
-}
-*/
 
 {
     "border": "normal",
@@ -59,15 +33,12 @@
        "x": 0,
        "y": 0
     },
-    "name": "Hexchat",
+    "name": "Slack",
     "percent": 0.283333333333333,
     "swallows": [
        {
-           "class": "^Hexchat$",
-           "instance": "^hexchat$"
-           // "title": "^IRC$"
-           // "transient_for": "^$",
-           // "window_role": "^gnome\\-terminal\\-window\\-ff4041ee\\-7c27\\-4d4e\\-b130\\-76c75e85ba4b$"
+           "class": "^Slack$",
+           "instance": "^slack$"
        }
     ],
     "type": "con"

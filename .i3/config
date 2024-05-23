@@ -30,7 +30,7 @@ font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 floating_modifier $win
 
 # start a terminal
-bindsym $win+Return exec i3-sensible-terminal
+bindsym $win+Return exec kitty
 
 # kill focused window
 bindsym $win+Shift+q kill
@@ -134,7 +134,7 @@ bindsym $win+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status --config ~/.i3/statusbar.config
+        status_command i3status --config ~/.config/i3/statusbar.config
         strip_workspace_numbers yes
 }
 
@@ -188,19 +188,19 @@ bindsym XF86TouchpadToggle "exec synclient touchpadoff=$touchpadtoggle" # toggle
 bindsym $win+F8 "exec synclient touchpadoff=$touchpadtoggle" # toggle touchpad
 
 # Take screenshot
-bindsym Print "exec scrot 'Screenshot - %Y-%m-%d--%_$wx$h_scrot.png' -e 'mv $f ~/images/'"
+bindsym Print "exec scrot 'screenshot-%Y-%m-%d--%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~/images/'"
 
 # Lock screen
 bindsym $ctrl+$alt+l exec i3lock --color 000000
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (S) shutdown
 mode "$mode_system" {
-     bindsym l exec --no-startup-id ~/.i3/scripts/i3exit lock, mode "default"
-     bindsym e exec --no-startup-id ~/.i3/scripts/i3exit logout, mode "default"
-     bindsym s exec --no-startup-id ~/.i3/scripts/i3exit suspend, mode "default"
-     bindsym h exec --no-startup-id ~/.i3/scripts/i3exit hibernate, mode "default"
-     bindsym r exec --no-startup-id ~/.i3/scripts/i3exit reboot, mode "default"
-     bindsym Shift+s exec --no-startup-id ~/.i3/scripts/i3exit shutdown, mode "default"
+     bindsym l exec --no-startup-id ~/.config/i3/scripts/i3exit lock, mode "default"
+     bindsym e exec --no-startup-id ~/.config/i3/scripts/i3exit logout, mode "default"
+     bindsym s exec --no-startup-id ~/.config/i3/scripts/i3exit suspend, mode "default"
+     bindsym h exec --no-startup-id ~/.config/i3/scripts/i3exit hibernate, mode "default"
+     bindsym r exec --no-startup-id ~/.config/i3/scripts/i3exit reboot, mode "default"
+     bindsym Shift+s exec --no-startup-id ~/.config/i3/scripts/i3exit shutdown, mode "default"
 
      # back to normal: Enter or Escape
      bindsym Return mode "default"
@@ -218,16 +218,16 @@ bindsym $win+Shift+Tab workspace prev
 bindsym $win+m exec i3-input -F 'rename workspace to "%s"' -P 'New name: '
 
 # Multiple monitors
-bindsym $win+Home exec ~/.i3/scripts/xrandr_auto
+bindsym $win+Home exec ~/.config/i3/scripts/xrandr_auto
 
-set $displayMode "Set display mode [w]ork [l]aptop [h]ome"
+set $displayMode "Set display mode [w]ork [l]aptop"
 bindsym $win+x mode $displayMode
 mode $displayMode {
     bindsym w exec "\
-                ~/.i3/scripts/work-displays.sh"; \
+                ~/.config/i3/scripts/work-displays.sh"; \
                 mode "default"
     bindsym l exec "\
-                ~/.i3/scripts/laptop-display.sh"; \
+                ~/.config/i3/scripts/laptop-display.sh"; \
                 mode "default"
 
     bindsym Return mode "default"
@@ -241,17 +241,12 @@ workspace_auto_back_and_forth yes
 
 # workspace assignment (use "xprop")
 assign [class="^Firefox$"] "1:www"
-assign [class="^Evolution$"] "2:social"
-assign [class="^Pidgin$"] "2:social"
+assign [class="^Webex$"] "2:social"
+assign [class="^Slack$"] "2:social"
 assign [class="^Emacs"] 3
 assign [class="^Gnome-terminal"] 4
 assign [title="IRC"] "2:social"
 assign [class="potify"] "10:♫"
-
-for_window [class="^Pidgin$"] floating disable
-for_window [window_role="buddy_list" title="^Buddy List$"] floating disable
-for_window [window_role="multifield"] floating enable
-for_window [window_role="conversation"] floating enable
 
 # TODO: Figure this out
 set $laptop eDP1
@@ -272,9 +267,9 @@ workspace "10" output $ext1 # fallback
 
 # Don't request focus on startup.
 no_focus [class="Firefox"]
-no_focus [class="Pidgin"]
+no_focus [class="Slack"]
+no_focus [class="Webex"]
 no_focus [class="Emacs"]
-no_focus [class="hexchat"]
 
 # Shortcuts
 bindsym $ctrl+$alt+e exec ec
@@ -285,13 +280,12 @@ exec "xset dpms 300 600 900 &"
 
 # Autostart
 exec firefox
+exec slack
+exec webex
 exec thunderbird
-# exec pidgin
-# exec pidgin
-# exec hexchat
 exec ec
-exec --no-startup-id "i3-msg 'workspace 10:♫; append_layout ~/.i3/workspaces/workspace-10.json'; exec spotify'"
+exec --no-startup-id "i3-msg 'workspace 10:♫; append_layout ~/.config/i3/workspaces/workspace-10.json'; exec spotify'"
 exec --no-startup-id nm-applet            #network applet
 exec --no-startup-id gnome-sound-applet   #sound applet
-exec --no-startup-id "i3-msg 'workspace 2:social; append_layout ~/.i3/workspaces/workspace-2.json'"
-#exec --no-startup-id "i3-msg 'workspace 10:♫; append_layout ~/.i3/workspaces/workspace-10.json'"
+exec --no-startup-id "i3-msg 'workspace 2:social; append_layout ~/.config/i3/workspaces/workspace-2.json'"
+#exec --no-startup-id "i3-msg 'workspace 10:♫; append_layout ~/.config/i3/workspaces/workspace-10.json'"
