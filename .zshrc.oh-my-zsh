@@ -185,12 +185,19 @@ zstyle ':completion:*:*:-command-:*:*' group-order alias builtins functions comm
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
 
-# Completion for bazel
-fpath[1,0]=~/.zsh/completions/
+# Completions
+fpath=(
+    ~/.zsh/completions/
+    ~/source/kerl/zsh_completion/
+    $fpath
+)
+
+source <(kubectl completion zsh)
 
 # Enable erlang/kerl by default
 LATEST_ERLANG=`ls -tA /usr/local/lib/erlang/ | head -1`
 . /usr/local/lib/erlang/${LATEST_ERLANG}/activate
+[ -f "/usr/local/lib/erlang/${LATEST_ERLANG}/rebar3/.cache/rebar3/bin" ] && PATH=/usr/local/lib/erlang/${LATEST_ERLANG}/rebar3/.cache/rebar3/bin:$PATH
 
 function find_ip() {
     aws ec2 describe-network-interfaces --filters "Name=addresses.private-ip-address,Values=$1"

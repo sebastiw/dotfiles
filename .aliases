@@ -1,5 +1,5 @@
 alias ls="ls --color=auto"
-alias l="ls -la"
+alias l="ls -lah"
 # alias ip="ip -c a"
 
 alias g="git st"
