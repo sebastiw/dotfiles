@@ -10,6 +10,7 @@ alias gc="git checkout"
 alias grep="grep --color=auto"
 
 alias s3cmd="s3cmd --no-progress"
+alias podspernode="kubectl get pod -owide | awk 'NR > 1 { p[$7]++; point=p[$7]; nodes[$7, point]=$1; } END { for(node in p) { print node; for(i=1; i<=p[node]; i++) { print "   ", nodes[node, i]; } } }'"
 
 alias sysinfo="sudo dmidecode -s system-serial-number; sudo dmidecode -s system-manufacturer; sudo dmidecode -s system-family"
 

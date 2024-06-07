@@ -212,8 +212,11 @@ export NVM_DIR="$HOME/.nvm"
 # Export credentials for the given profile as shell vars.
 awshell () {
     profile="${1?Need to provide a profile}"
+    AWS_REGION="${2:-}"
     eval "$(aws --profile="$profile" configure export-credentials --format env)"
-    export AWS_REGION="$(aws --profile="$profile" configure get region)"
+    [[ -z "$AWS_REGION" ]] && AWS_REGION="$(aws --profile="$profile" configure get region)"
+    [[ -z "$AWS_REGION" ]] && AWS_REGION="eu-west-1"
+    export AWS_REGION
 }
 
 # Clear the credentials from the exported shell vars.
