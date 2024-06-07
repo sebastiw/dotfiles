@@ -25,7 +25,7 @@ export FLUX_FORWARD_NAMESPACE="terminators"
 export CHROME_EXECUTABLE="chromium"
 
 export MOZ_ENABLE_WAYLAND=1
-export QT_QPA_PLATFORM=wayland
+export QT_QPA_PLATFORM=xcb
 export XDG_SESSION_TYPE=wayland
 # export MOZ_DISABLE_WAYLAND_PROXY=1 # https://bugzilla.mozilla.org/show_bug.cgi?id=1882449#c3
 
