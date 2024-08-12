@@ -182,7 +182,17 @@ bindsym XF86TouchpadToggle "exec synclient touchpadoff=$touchpadtoggle" # toggle
 bindsym $win+F8 "exec synclient touchpadoff=$touchpadtoggle" # toggle touchpad
 
 # Take screenshot
-bindsym Print "exec scrot 'screenshot-%Y-%m-%d--%H:%M:%S_$wx$h_scrot.png' -e 'mv $f ~/images/'"
+set $mode_printscr [f]ocused, [s]elect, [a]ll
+mode "$mode_printscr" {
+     set $filename 'screenshot-%Y-%m-%d--%H%M%S_$wx$h_scrot.png'
+     bindsym f exec scrot -u $filename -e 'mv $f ~/images/', mode "default"
+     bindsym --release s exec scrot -s $filename -e 'mv $f ~/images/', mode "default"
+     bindsym a exec scrot -m $filename -e 'mv $f ~/images/', mode "default"
+
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
+}
+bindsym Print mode "$mode_printscr"
 
 # Lock screen
 bindsym $ctrl+$alt+l exec i3lock --color 000000
@@ -195,7 +205,7 @@ bindsym $win+Shift+r restart
 # exit i3 (logs you out of your X session)
 # bindsym $win+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-set $mode_system System (l) lock, (e) logout, (E) kill i3 (s) suspend, (h) hibernate, (r) reboot, (S) shutdown
+set $mode_system System [l]ock, [e] logout, [E] kill i3, [s]uspend, [h]ibernate, [r]eboot, [S]hutdown
 mode "$mode_system" {
      bindsym l exec --no-startup-id ~/.config/i3/scripts/i3exit lock, mode "default"
      bindsym e exec --no-startup-id ~/.config/i3/scripts/i3exit logout, mode "default"
@@ -223,9 +233,8 @@ bindsym $win+m exec i3-input -F 'rename workspace to "%s"' -P 'New name: '
 # Multiple monitors
 bindsym $win+Home exec ~/.config/i3/scripts/xrandr_auto
 
-set $displayMode "Set display mode [w]ork [l]aptop"
-bindsym $win+x mode $displayMode
-mode $displayMode {
+set $mode_display Set display mode [w]ork [l]aptop
+mode "$mode_display" {
     bindsym w exec "\
                 ~/.config/i3/scripts/work-displays.sh"; \
                 mode "default"
@@ -236,6 +245,7 @@ mode $displayMode {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
+bindsym $win+x mode "$mode_display"
 
 # Assume you are on workspace "1: www" and switch to "2: IM" using mod+2 because
 # somebody sent you a message. You don’t need to remember where you came from
