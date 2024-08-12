@@ -1,8 +1,9 @@
-spec
-sigshark.py
-rebar3
-kerl
-hermit-stable
-hermit
-grpcurl
 duo-sso
+grpcurl
+hermit
+hermit-stable
+kerl
+rebar3
+sigshark.py
+spec
+terraform
