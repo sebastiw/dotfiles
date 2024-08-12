@@ -10,7 +10,6 @@ PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH
 # PATH=$HOME/work/forks/pest:$PATH
 # PATH=/opt/flutter/bin:$PATH
 # PATH=$HOME/perl5/bin:$PATH
-PATH=$HOME/work/loltel/script:$PATH
 export PATH
 
 # Path to your oh-my-zsh installation.
@@ -94,6 +93,9 @@ CASE_SENSITIVE="true"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+# Uncomment the following line if pasting URLs and other text is messed up.
+DISABLE_MAGIC_FUNCTIONS=true
+
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
@@ -136,7 +138,7 @@ plugins=(
 # zstyle :omz:plugins:ssh-agent identities id_rsa id_rsa2 id_github
 #zstyle :omz:plugins:ssh-agent agent-forwarding on
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
-# export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 # No beep sounds
 unsetopt BEEP
