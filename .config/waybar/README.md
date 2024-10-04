@@ -5,5 +5,13 @@ Fonts
 
 Icons
 ---
-https://cdn.materialdesignicons.com/4.4.95/
 
+Install:
+```bash
+git clone git@github.com/Templarian/MaterialDesign-Font
+sudo cp MaterialDesignIconsDesktop.ttf /usr/local/share/fonts
+fc-cache -f -v
+```
+
+Review:
+https://pictogrammers.com/library/mdi/
