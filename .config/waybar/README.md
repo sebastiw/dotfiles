@@ -8,8 +8,8 @@ Icons
 
 Install:
 ```bash
-git clone git@github.com/Templarian/MaterialDesign-Font
-sudo cp MaterialDesignIconsDesktop.ttf /usr/local/share/fonts
+git clone git@github.com:Templarian/MaterialDesign-Font
+cp MaterialDesignIconsDesktop.ttf ~/.local/share/fonts/material-design-icons.ttf
 fc-cache -f -v
 ```
 

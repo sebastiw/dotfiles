@@ -1,6 +1,8 @@
 [redshift]
 location-provider=manual
 adjustment-method=wayland
+dawn-time=07:00-08:30
+dusk-time=21:00-22:00
 
 [manual]
 lat=59.3251172
